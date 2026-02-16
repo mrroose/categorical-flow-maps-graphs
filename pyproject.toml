@@ -1,0 +1,73 @@
+[project]
+name = "catflow-map"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "torch_geometric==2.7.0",
+    "torch==2.6.0",
+    "torchvision==0.21.0",
+    "wandb>=0.21.4",
+    "dill>=0.4.0",
+    "fcd>=1.2.2",
+    "joblib>=1.4.2",
+    "matplotlib>=3.8.4",
+    "networkx>=3.2.1",
+    "numpy>=2.4.0",
+    "pandas>=2.3.3",
+    "pyemd>=1.0.0",
+    "rdkit>=2025.9.3",
+    "scikit_learn>=1.4.2",
+    "scipy>=1.16.3",
+    "torchdiffeq>=0.2.5",
+    "tqdm>=4.66.4",
+    "pytorch_warmup>=0.2.0",
+    "torch-ema>=0.3",
+]
+
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu124", marker = "sys_platform == 'linux'" },
+]
+torchvision = [
+  { index = "pytorch-cu124", marker = "sys_platform == 'linux'" },
+]
+pyg-lib = [
+  { index = "torch-geom-cu124", marker = "sys_platform == 'linux'" },
+]
+torch-sparse = [
+  { index = "torch-geom-cu124", marker = "sys_platform == 'linux'" },
+]
+torch-cluster = [
+  { index = "torch-geom-cu124", marker = "sys_platform == 'linux'" },
+]
+torch-spline-conv = [
+  { index = "torch-geom-cu124", marker = "sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu124"
+url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[[tool.uv.index]]
+name = "torch-geom-cu124"
+url = "https://data.pyg.org/whl/torch-2.6.0+cu124.html"
+explicit = true
+
+[tool.uv]
+find-links = ["https://data.pyg.org/whl/torch-2.6.0+cu124.html"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"] # Updated to match your requires-python
+
+[tool.ruff]
+line-length = 88
+target-version = "py311" # Updated to match your requires-python
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501", "E731"]
