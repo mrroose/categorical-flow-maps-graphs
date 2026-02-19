@@ -45,19 +45,6 @@ def main(args):
     os.makedirs(ckpt_dir, exist_ok=True)
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-    # Create descriptive run name
-    run_name = ""
-    if args.prefix != "":
-        run_name = f"{args.prefix}_"
-    run_name += f"{args.velocity_loss}"
-    if args.distill_objective != "none":
-        run_name += "_distill"
-    run_name += f"_l{args.num_layers}_bs{args.batch_size}"
-    if args.loss_weight:
-        run_name += "_lw"
-    if args.no_time_embed:
-        run_name += "_no_tembed"
-
     (
         train_loader,
         val_loader,
@@ -106,8 +93,7 @@ def main(args):
         config = vars(args).copy()
         config["git_branch"] = get_git_branch()
         wandb.init(
-            project="graphs-one-step-initial",
-            name=run_name,
+            project="categorical-flow-maps",
             config=config,
         )
         run_id = wandb.run.id
