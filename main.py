@@ -24,50 +24,8 @@ from utils.general_utils import (
     get_git_branch,
     get_model,
     make_ckpt_name,
-    set_seed,
+    set_seed, _canonicalize_distillation_flags,
 )
-
-
-def _flag_is_set(flag_name: str) -> bool:
-    return any(
-        arg == flag_name or arg.startswith(f"{flag_name}=") for arg in sys.argv[1:]
-    )
-
-
-def _canonicalize_distillation_flags(parser: argparse.ArgumentParser, args) -> None:
-    """
-    Canonical internal representation:
-      distill_objective in {"none", "mse", "csd", "ecld"}.
-    Legacy --distill_loss remains accepted for compatibility.
-    """
-    legacy_to_objective = {
-        "none": "none",
-        "mse": "mse",
-        "kld": "csd",
-        "ecld": "ecld",
-    }
-    objective_to_legacy = {
-        "none": "none",
-        "mse": "mse",
-        "csd": "kld",
-        "ecld": "ecld",
-    }
-
-    distill_loss_set = _flag_is_set("--distill_loss")
-    objective_set = _flag_is_set("--distill_objective")
-    if distill_loss_set:
-        mapped_objective = legacy_to_objective[args.distill_loss]
-        if objective_set and args.distill_objective != mapped_objective:
-            parser.error(
-                "Conflicting distillation flags: "
-                f"--distill_loss {args.distill_loss} maps to "
-                f"--distill_objective {mapped_objective}, but got "
-                f"--distill_objective {args.distill_objective}."
-            )
-        args.distill_objective = mapped_objective
-
-    # Keep legacy field populated to avoid breaking old checkpoint/log consumers.
-    args.distill_loss = objective_to_legacy[args.distill_objective]
 
 
 def main(args):
